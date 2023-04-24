@@ -2,11 +2,12 @@
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 // Windows Header Files
 #include <Windows.h>
+#include <stdio.h>
 
 extern "C" { // for demangling
-    __declspec(dllexport) bool InjectDLL(int pid, const char* dllPath)
+    __declspec(dllexport) bool InjectDLL(int pid, const wchar_t* dllPath)
     {
-        auto lenPath = strlen(dllPath);
+        auto lenPath = wcslen(dllPath);
         if (lenPath <= 0)
             return false;
 
@@ -27,7 +28,7 @@ extern "C" { // for demangling
                     if (pMem != 0)
                     {
                         // Now we need to write dllPath to mem
-                        WriteProcessMemory(hProcess, pMem, dllPath, lenPath + 1, 0);
+                        WriteProcessMemory(hProcess, pMem, dllPath, (lenPath + 1) * 2, 0); // FIXED: wchar = 2bytes, len + zero terminator * 2
                         // Now we need to create thread on LoadLibrary
                         auto hThread = CreateRemoteThread(hProcess, 0, 0, (LPTHREAD_START_ROUTINE)pLoadLib, pMem, 0, 0);
                         if (hThread)
