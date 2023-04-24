@@ -9,3 +9,9 @@ No, in theory you can use this in any language you want but I only included any 
 
 ### How can I use this in other languages?
 Research how U can load and call an exported function, the DLL contains an exported function called InjectDLL and takes arguments (int, const char*) while it returns a boolean value. False if fail.
+
+
+#### Problems?
+- Make sure you run python as Admin!
+- Make sure you gave an full path for your dll.
+- Make sure your target process is x86
